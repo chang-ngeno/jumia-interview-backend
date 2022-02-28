@@ -101,11 +101,9 @@ public class PhoneServiceImpl implements PhoneService {
 		boolean isValid = false;
 		if (!country.equals(null)) {
 			Pattern regex = Pattern.compile(country.getPhonePattern());
-	        Matcher matcher = regex.matcher(contact.getCustomerPhone());
-			isValid = matcher.matches();
 			isValid = regex.matcher(contact.getCustomerPhone()).matches();
-			System.out.format("Regex: %s, Phone: %s, Valid %s. \n", country.getPhonePattern(), contact.getCustomerPhone(),
-					String.valueOf(isValid));
+			System.out.format("Regex: %s, Phone: %s, Valid %s. \n", country.getPhonePattern(),
+					contact.getCustomerPhone(), String.valueOf(isValid));
 		}
 		phone.setValid(isValid);
 		phone.setCountry(country);
