@@ -3,7 +3,6 @@ package jumia.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,8 +101,6 @@ public class PhoneServiceImpl implements PhoneService {
 		if (!country.equals(null)) {
 			Pattern regex = Pattern.compile(country.getPhonePattern());
 			isValid = regex.matcher(contact.getCustomerPhone()).matches();
-			System.out.format("Regex: %s, Phone: %s, Valid %s. \n", country.getPhonePattern(),
-					contact.getCustomerPhone(), String.valueOf(isValid));
 		}
 		phone.setValid(isValid);
 		phone.setCountry(country);
