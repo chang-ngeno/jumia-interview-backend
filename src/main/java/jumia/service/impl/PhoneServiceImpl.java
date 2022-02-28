@@ -3,6 +3,7 @@ package jumia.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,6 @@ public class PhoneServiceImpl implements PhoneService {
 
 	@Override
 	public DataResult<List<Contact>> getAllContacts() {
-		/*
-		 * try { allContacts = new
-		 * SuccessDataResult<List<Contact>>(contactRepository.findAll(),
-		 * MessageResults.allDataListed(FIELD)); } catch (Exception ex) { allContacts =
-		 * new ErrorDataResult<List<Contact>>(MessageResults.error + " " +
-		 * ex.getMessage()); } return allContacts;
-		 */
 		FIELD = "contact";
 		return new SuccessDataResult<List<Contact>>(contactRepository.findAll(), MessageResults.allDataListed(FIELD));
 	}
@@ -89,21 +83,13 @@ public class PhoneServiceImpl implements PhoneService {
 			if (contacts.isEmpty()) {
 				return new ErrorDataResult<Page<PhoneDetailDTO>>(MessageResults.notFound(FIELD));
 			}
-			/*
-			 * for (Contact t : contacts) {
-			 * phoneDetails.add(convertContactToPhoneDetail(t)); }
-			 */
 			contacts.getContent().forEach(t -> {
 				phoneDetails.add(convertContactToPhoneDetail(t));
 			});
-
 			phoneDetailDTOs = new PageImpl<PhoneDetailDTO>(phoneDetails, pageable, contacts.getSize());
-//			phoneDetailDTOs.and(phoneDetails);
-//			phoneDetailDTOs.getContent().addAll(phoneDetails);
 		} catch (Exception ex) {
 			return new ErrorDataResult<>(MessageResults.error + " " + ex.getMessage());
 		}
-//		phoneDetailDTOs.get().collect();
 		return new SuccessDataResult<>(phoneDetailDTOs, MessageResults.allDataListed(FIELD));
 	}
 
@@ -115,7 +101,11 @@ public class PhoneServiceImpl implements PhoneService {
 		boolean isValid = false;
 		if (!country.equals(null)) {
 			Pattern regex = Pattern.compile(country.getPhonePattern());
-			isValid = regex.matcher(contact.getCustomerPhone()) != null;
+	        Matcher matcher = regex.matcher(contact.getCustomerPhone());
+			isValid = matcher.matches();
+			isValid = regex.matcher(contact.getCustomerPhone()).matches();
+			System.out.format("Regex: %s, Phone: %s, Valid %s. \n", country.getPhonePattern(), contact.getCustomerPhone(),
+					String.valueOf(isValid));
 		}
 		phone.setValid(isValid);
 		phone.setCountry(country);
