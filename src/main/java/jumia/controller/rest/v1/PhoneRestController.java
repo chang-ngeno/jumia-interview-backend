@@ -21,7 +21,7 @@ import jumia.service.PhoneService;
 
 @RestController
 @RequestMapping("/api/v1/")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost","http://localhost:8480", "http://127.0.0.1","http://localhost:4200","http://127.0.0.1:8480"})
 public class PhoneRestController {
 	private PhoneService phoneService;
 
